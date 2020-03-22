@@ -5,17 +5,23 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Entity
 @Data
+@DynamicInsert
+@DynamicUpdate
 public class Customer {
 
     @Id
@@ -26,10 +32,10 @@ public class Customer {
     private String firstName;
     private String lastName;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Contact> contacts;
 
-    @ManyToMany(mappedBy = "customers", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "customers", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Role> roles;
 
     public void addContact(Contact contact) {
